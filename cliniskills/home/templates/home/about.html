@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- About Section -->
+    <div class="flex flex-wrap -mx-4">
+        <!-- Image and Basic Info -->
+        <div class="w-full lg:w-1/2 px-4 mb-4 lg:mb-0">
+            <img src="{% static 'images/default-doctor-image.png' %}" alt="Doctor" class="rounded-lg shadow-lg w-full">
+            <div class="mt-4">
+                <h2 class="text-2xl font-semibold text-gray-700">Dr. Jane Doe</h2>
+                <p class="text-gray-600">Specialist in Internal Medicine</p>
+                <p class="mt-2 text-gray-500">With over 10 years of experience in patient care and health management.</p>
+            </div>
+        </div>
+
+        <!-- Detailed Info -->
+        <div class="w-full lg:w-1/2 px-4">
+            <h3 class="text-xl font-semibold text-gray-700 mb-3">About Dr. Jane Doe</h3>
+            <p class="text-gray-600">Dr. Jane Doe is a highly skilled physician with a passion for improving patient health and well-being. She has dedicated her career to providing top-notch medical care, specializing in internal medicine. Dr. Doe graduated from the University of Medical Sciences and completed her residency at Prestigious Hospital.</p>
+            <p class="mt-2 text-gray-600">Her approach to medicine combines advanced medical knowledge with compassionate care, ensuring that each patient receives personalized attention and treatment. Dr. Doe is also an avid researcher and has contributed to several publications in the field of internal medicine.</p>
+
+            <!-- Add more sections as necessary -->
+        </div>
+    </div>
+</div>
+{% endblock %}
