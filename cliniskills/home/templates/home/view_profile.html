@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <!-- Display Messages Here -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div id="message-{{ forloop.counter }}" class="flex justify-between items-center p-4 mb-4 border rounded {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <span>{{ message }}</span>
+                    <button onclick="document.getElementById('message-{{ forloop.counter }}').style.display='none';" class="ml-4 rounded text-white p-1 hover:bg-opacity-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="p-4 border-b">
+            <h2 class="text-xl font-semibold text-gray-800">Your Profile</h2>
+        </div>
+        <div class="p-4">
+            <p class="text-gray-600"><span class="font-semibold">Username:</span> {{ user.username }}</p>
+            <p class="text-gray-600"><span class="font-semibold">Email:</span> {{ user.email }}</p>
+            <!-- Add other fields if necessary -->
+        </div>
+        <div class="p-4 border-t flex justify-center">
+            <!-- Trigger Modal Button -->
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">Request Profile Deletion</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="deletionModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Profile Deletion Request</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">
+                    Your request to delete your profile has been noted. 
+                    An admin will review your request and your profile will be deleted within 90 days.
+                </p>
+            </div>
+            <form action="{% url 'home:request_delete_profile' %}" method="post">
+                {% csrf_token %}
+                <div class="items-center px-4 py-3">
+                    <button type="submit" class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300">
+                        Confirm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openModal() {
+        document.getElementById('deletionModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('deletionModal').classList.add('hidden');
+    }
+
+    document.getElementById('okBtn').addEventListener('click', closeModal);
+</script>
+{% endblock %}

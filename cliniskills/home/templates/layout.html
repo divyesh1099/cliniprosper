@@ -40,6 +40,7 @@
                     <a href="{% url 'home:about' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/about' %}border-b-4 border-green-500 text-green-500{% endif %}">About</a>
                     <a href="{% url 'home:contact' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/contact' %}border-b-4 border-green-500 text-green-500{% endif %}">Contact</a>
                     {% if user.is_authenticated %}
+                    <a href="{% url 'home:view_profile' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Profile</a>
                     <a href="{% url 'home:logout' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Logout</a>
                     {% else %}
                     <a href="{% url 'home:login' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/login' %}border-b-4 border-green-500 text-green-500{% endif %}">Log In</a>
@@ -58,6 +59,7 @@
             <a href="{% url 'home:contact' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/contact' %}border-b-4 border-green-500 text-green-500{% endif %}">Contact</a>
             <!-- Conditional Links for Authenticated Users -->
             {% if user.is_authenticated %}
+            <a href="{% url 'home:view_profile' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300">Profile</a>
             <a href="{% url 'home:logout' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300">Logout</a>
             {% else %}
             <a href="{% url 'home:login' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/login' %}border-b-4 border-green-500 text-green-500{% endif %}">Log In</a>
@@ -91,6 +93,7 @@
             });
         });
     </script>
-
+    {% block extra_js %}
+    {% endblock %}
 </body>
 </html>

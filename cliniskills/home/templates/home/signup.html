@@ -1,7 +1,26 @@
 {% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
+    <!-- Display Messages Here -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div id="message-{{ forloop.counter }}" class="flex justify-between items-center p-4 mb-4 border rounded {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <span>{{ message }}</span>
+                    <button onclick="document.getElementById('message-{{ forloop.counter }}').style.display='none';" class="ml-4 rounded text-white p-1 hover:bg-opacity-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-md">
         <div class="md:flex">
             <div class="w-full p-4 px-5 py-5">
