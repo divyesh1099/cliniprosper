@@ -49,9 +49,76 @@
 
     <!-- Purchase Button -->
     <div class="text-center mt-10">
-        <a href="#" class="px-6 py-3 bg-blue-500 text-white font-bold text-lg rounded hover:bg-blue-600 transition duration-300">
+        {% if request.user.is_authenticated %}
+        {% if is_subscription_active %}
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed" disabled>
+            You Have Already Purchased
+        </button>
+        {% else %}
+        <button onclick="startRazorpayPayment()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Purchase Lifetime Access for ₹1000
+        </button>
+        {% endif %}
+        {% else %}
+
+        <a href="{% url 'home:login' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Purchase Lifetime Access for ₹1000
         </a>
+        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function startRazorpayPayment() {
+        var options = {
+            "key": "{{ razorpay_key_id }}",
+            "amount": "100000", // Amount in paise
+            "currency": "INR",
+            "name": "CliniSkills",
+            "description": "Lifetime Subscription",
+            // Add more Razorpay options here as needed
+            "handler": function (response) {
+                // Handle the payment success
+                postPaymentSuccess(response.razorpay_payment_id, response.razorpay_order_id);
+            },
+            "prefill": {
+                "name": "{{ request.user.username }}",
+                "email": "{{ request.user.email }}"
+            },
+            // other Razorpay options
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+    }
+
+    function postPaymentSuccess(payment_id, order_id) {
+        // Create a form and submit it to your Django backend
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "{% url 'home:payment_success' %}");
+
+        // CSRF Token
+        var csrfToken = '{% csrf_token %}';
+        form.appendChild(createInput('csrfmiddlewaretoken', csrfToken));
+
+        // Payment ID and Order ID
+        form.appendChild(createInput('razorpay_payment_id', payment_id));
+        form.appendChild(createInput('razorpay_order_id', order_id));
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function createInput(name, value) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", name);
+        input.setAttribute("value", value);
+        return input;
+    }
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 {% endblock %}

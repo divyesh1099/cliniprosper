@@ -1,18 +1,29 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
-from .forms import EditProfileForm
+from razorpay_custom_secret_keys import *
+from .models import *
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
-    context={}
+    user = request.user
+    is_subscription_active = False
+
+    if user.is_authenticated:
+        try:
+            subscription = Subscription.objects.get(user=user)
+            is_subscription_active = subscription.is_active
+        except Subscription.DoesNotExist:
+            pass
+    context={
+        'is_subscription_active': is_subscription_active
+    }
     return render(request, 'home/index.html', context)
 
 def custom_login(request):
@@ -68,7 +79,10 @@ def signup(request):
         return render(request, 'home/signup.html')
 
 def services(request):
-    return render(request, 'home/services.html')
+    context = {
+        'razorpay_key_id': RAZORPAY_KEY_ID
+    }
+    return render(request, 'home/services.html', context)
 
 def about(request):
     return render(request, 'home/about.html')
@@ -79,7 +93,10 @@ def contact(request):
 @login_required
 def view_profile(request):
     user = get_object_or_404(User, username=request.user.username)
-    return render(request, 'home/view_profile.html', {'user': user})
+    user_subscription = None
+    if request.user.is_authenticated:
+        user_subscription = Subscription.objects.filter(user=request.user).first()
+    return render(request, 'home/view_profile.html', {'user': user, 'user_subscription': user_subscription})
 
 @login_required
 def request_delete_profile(request):
@@ -90,3 +107,36 @@ def request_delete_profile(request):
 
     # Redirect to profile or other appropriate page if not POST
     return redirect('home:view_profile')
+
+@login_required
+@csrf_exempt  # Necessary for handling POST requests from Razorpay
+def payment_success(request):
+    if request.method == 'POST':
+        # Extract payment details from request.POST
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        razorpay_order_id = request.POST.get('razorpay_order_id')
+        user = request.user
+        amount = 1000  # Set this to the actual amount
+
+        # Verify payment (You should verify the signature here as per Razorpay docs)
+
+        # Create or update the payment record
+        Payment.objects.create(
+            user=user,
+            amount=amount,
+            date=timezone.now(),
+            transaction_id=razorpay_payment_id
+        )
+
+        # Update or create the subscription
+        subscription, created = Subscription.objects.get_or_create(user=user)
+        subscription.start_date = timezone.now()
+        subscription.is_active = True
+        subscription.save()
+
+        messages.success(request, 'Payment successful!')
+        return render(request, 'home/payment_success.html')
+
+    # Handle non-POST requests or failed verifications
+    messages.error(request, 'Payment failed.')
+    return render(request, 'home/payment_failure.html')

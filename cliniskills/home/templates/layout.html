@@ -40,6 +40,11 @@
                     <a href="{% url 'home:about' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/about' %}border-b-4 border-green-500 text-green-500{% endif %}">About</a>
                     <a href="{% url 'home:contact' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/contact' %}border-b-4 border-green-500 text-green-500{% endif %}">Contact</a>
                     {% if user.is_authenticated %}
+                    {% if is_subscription_active %}
+                        <!-- Links to Lectures and Notes -->
+                        <a href="{% url 'lecture:index' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/lectures' %}border-b-4 border-green-500 text-green-500{% endif %}">Lectures</a>
+                        <a href="{% url 'note:index' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300 {% if path == '/notes' %}border-b-4 border-green-500 text-green-500{% endif %}">Notes</a>
+                    {% endif %}
                     <a href="{% url 'home:view_profile' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Profile</a>
                     <a href="{% url 'home:logout' %}" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Logout</a>
                     {% else %}
@@ -57,9 +62,15 @@
             <a href="{% url 'home:services' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/services' %}border-b-4 border-green-500 text-green-500{% endif %}">Services</a>
             <a href="{% url 'home:about' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/about' %}border-b-4 border-green-500 text-green-500{% endif %}">About</a>
             <a href="{% url 'home:contact' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/contact' %}border-b-4 border-green-500 text-green-500{% endif %}">Contact</a>
+
             <!-- Conditional Links for Authenticated Users -->
             {% if user.is_authenticated %}
-            <a href="{% url 'home:view_profile' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300">Profile</a>
+            {% if is_subscription_active %}
+                <!-- Links to Lectures and Notes -->
+                <a href="{% url 'lecture:index' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/lectures' %}border-b-4 border-green-500 text-green-500{% endif %}">Lectures</a>
+                <a href="{% url 'note:index' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/notes' %}border-b-4 border-green-500 text-green-500{% endif %}">Notes</a>
+            {% endif %}            
+            <a href="{% url 'home:view_profile' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/profile' %}border-b-4 border-green-500 text-green-500{% endif %}">Profile</a>
             <a href="{% url 'home:logout' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300">Logout</a>
             {% else %}
             <a href="{% url 'home:login' %}" class="block py-2 px-2 text-sm text-gray-500 font-semibold hover:text-green-500 transition duration-300 {% if path == '/login' %}border-b-4 border-green-500 text-green-500{% endif %}">Log In</a>

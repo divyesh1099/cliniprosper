@@ -32,6 +32,25 @@
             <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">Request Profile Deletion</button>
         </div>
     </div>
+
+    <!-- Subscription Details -->
+    <div class="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-6">
+        <div class="p-4 border-b">
+            <h2 class="text-xl font-semibold text-gray-800">Subscription Details</h2>
+        </div>
+        <div class="p-4">
+            {% if is_subscription_active %}
+                <p class="text-gray-600"><span class="font-semibold">Start Date:</span> {{ user_subscription.start_date|date:"Y-m-d" }}</p>
+                <p class="text-gray-600"><span class="font-semibold">Status:</span> Status:</span> {% if user_subscription.is_active %}Active{% else %}Inactive{% endif %}</p>
+                <!-- Add other subscription fields if necessary -->
+            {% else %}
+            <p class="text-gray-600">You do not have an active subscription.</p>
+            <div class="p-4 border-t flex justify-center">
+                <a href="{% url 'home:services' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Purchase Now</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->

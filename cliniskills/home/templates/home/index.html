@@ -18,7 +18,7 @@
 <!-- Main Content -->
 <div class="container mx-auto px-4 py-8">
     {% if user.is_authenticated %}
-        {% if user.has_paid_subscription %}
+        {% if is_subscription_active %}
             <!-- Paid User Content -->
             <div class="text-center">
                 <h2 class="text-2xl font-semibold">Welcome back, {{ user.username }}!</h2>
