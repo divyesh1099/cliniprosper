@@ -3,8 +3,10 @@ from .models import *
 from django.db.models import Q
 from django.utils import timezone
 import datetime
+from decorators import *
 
 # Create your views here.
+@user_is_subscribed
 def index(request):
     lectures = Lecture.objects.all().order_by('-date')  # Ordering lectures by date
 

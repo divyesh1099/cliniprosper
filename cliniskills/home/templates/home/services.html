@@ -1,6 +1,23 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% block content %}
+
+<!-- Display Messages Here -->
+{% if messages %}
+<div class="mb-4">
+    {% for message in messages %}
+        <div id="message-{{ forloop.counter }}" class="flex justify-between items-center p-4 mb-4 border rounded {% if message.tags %}{{ message.tags }}{% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="document.getElementById('message-{{ forloop.counter }}').style.display='none';" class="ml-4 rounded text-white p-1 hover:bg-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="container mx-auto px-4">
     <div class="text-center my-10">
         <h2 class="text-4xl font-bold text-green-600">Our Services</h2>

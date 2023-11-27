@@ -2,7 +2,10 @@ from django.shortcuts import render
 from .models import *
 from django.db.models import Q
 import datetime
+from decorators import *
+
 # Create your views here.
+@user_is_subscribed
 def index(request):
     notes = Note.objects.all().order_by('-upload_date')
     # Handling the search query
