@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <!-- Search and Clear Filter -->
+    <div class="flex flex-col sm:flex-row justify-center mb-6">
+        <form method="get" action="." class="w-full max-w-xl mb-3 sm:mb-0 sm:flex">
+            <input class="flex-grow appearance-none bg-transparent border border-gray-300 rounded-l py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500" type="text" name="q" placeholder="Search lectures by Date(YYYY-MM-DD), Name or Keyword" value="{{ request.GET.q }}">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r" type="submit">
+                Search
+            </button>
+            <button type="button" onclick="location.href='.'" class="ml-2 bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out sm:ml-2">
+                Clear
+            </button>
+        </form>
+    </div>
+
+    <!-- Lectures Display -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for lecture in lectures %}
+        <div class="max-w-sm rounded overflow-hidden shadow-lg p-4">
+            <h3 class="font-bold text-xl mb-2">{{ lecture.title }}</h3>
+            <p class="text-gray-700 text-base">{{ lecture.description }}</p>
+            <p class="text-gray-600 text-xs">Date: {{ lecture.date | date:"D, d M Y H:i" }}</p>
+            <a href="{{ lecture.meet_link }}" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-3 block text-center">
+                Join Lecture
+            </a>
+            {% if lecture.is_upcoming %}
+                <span class="text-sm text-blue-500">Upcoming</span>
+            {% else %}
+                <span class="text-sm text-red-500">Lecture Passed</span>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center">
+            <p>No lectures found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
